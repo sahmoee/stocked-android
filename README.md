@@ -2,6 +2,8 @@
 
 Native Kotlin/Compose edition for Android 8.0 (API 26) and newer. Includes offline inventory, groceries, recipes and meal plans, reviewed backup imports, recipe file/web imports, food/receipt image recognition and household sync. This edition is still being validated and does not yet match every iOS feature.
 
+Active Android project: this standalone repository. The iOS app remains in the Stocked repository.
+
 ## Appearance
 
 Android follows Stocked iOS: Home, Cook, Kitchen, Recipes and Grocery bottom tabs, a separate Settings button, warm Pastel colors, serif headings and the original kitchen illustrations. Pastel light is the default; Dark can be selected in Settings. The Deck uses this same app navigation without a desktop side rail.
@@ -24,13 +26,12 @@ Waydroid setup depends on SteamOS kernel/container support. APK installation alo
 Install JDK 17 and Android SDK platform 36. Android Studio is optional. SDK and build tools are free; the SDK license must be accepted locally. Set `ANDROID_HOME` or an ignored `local.properties` containing `sdk.dir`.
 
 ```sh
-cd android
 ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
 ```
 
 The committed Gradle wrapper checks the distribution checksum. GitHub Actions runs unit tests, lint and compilation with cached dependencies and uploads reports. Release compilation is unsigned when no signing configuration is supplied. CI does not generate or publish private signing keys or signed application files.
 
-For a signed release, put all four values in ignored `android/signing.properties`:
+For a signed release, put all four values in ignored `signing.properties`:
 
 ```properties
 storeFile=/absolute/private/path/stocked-release.jks
