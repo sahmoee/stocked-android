@@ -1,12 +1,13 @@
 name: Android checks
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: android-${{ github.ref }}
+  group: android-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   android:
@@ -30,7 +31,7 @@ jobs:
         run: >-
           python3 -c 'from pathlib import Path; p=Path("gradle/wrapper/gradle-wrapper.properties").read_text(); assert "distributionSha256Sum=f397b287023acdba1e9f6fc5ea72d22dd63669d59ed4a289a29b1a76eee151c6" in p, "Pin the Gradle 8.11.1 distribution SHA-256 before building"'
       - name: Unit tests, lint and debug/release compilation
-        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease --no-daemon --console=plain
+        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease --no-daemon --console=plain --stacktrace
       - name: Upload build reports
         if: always()
         uses: actions/upload-artifact@v4
