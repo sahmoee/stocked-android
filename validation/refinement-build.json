@@ -38,7 +38,8 @@
     "Shelf life lookup",
     "Storage tips reference",
     "Seasonal produce with in-stock flag",
-    "Low-fill report explicit add-to-groceries"
+    "Low-fill report explicit add-to-groceries",
+    "Recipe CSV import accepts iOS formula-guarded cells, CRLF/CR rows and BOM"
   ],
   "validation": {
     "unit_tests": 98,
