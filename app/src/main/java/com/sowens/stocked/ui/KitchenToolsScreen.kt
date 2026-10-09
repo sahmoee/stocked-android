@@ -15,13 +15,13 @@ import java.time.LocalDate
 import java.text.NumberFormat
 
 @Composable
-fun KitchenToolsScreen(state:KitchenState,onClose:()->Unit) {
+fun KitchenToolsScreen(state:KitchenState,onClose:()->Unit,addGrocery:(GroceryItem)->Unit={}) {
  var selected by rememberSaveable{mutableStateOf("summary")}
  Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
   TextButton(onClick=onClose){Text("Back")}
   Text("Kitchen tools",style=MaterialTheme.typography.headlineLarge)
   Text("Useful calculations and a clear view of your pantry. Everything here works offline.")
-  ToolMenu(selected,{selected=it},listOf("summary" to "Pantry overview","expiry" to "Expiry calendar","low" to "Low fill report","duplicates" to "Duplicate finder","snapshot" to "Pantry snapshot","convert" to "Unit converter")+KitchenTools.calculators.map{it.id to it.title})
+  ToolMenu(selected,{selected=it},listOf("summary" to "Pantry overview","expiry" to "Expiry calendar","low" to "Low fill report","duplicates" to "Duplicate finder","snapshot" to "Pantry snapshot","convert" to "Unit converter")+parityTools+KitchenTools.calculators.map{it.id to it.title})
   when(selected) {
    "summary"->PantryOverview(state)
    "expiry"->{
@@ -37,11 +37,11 @@ fun KitchenToolsScreen(state:KitchenState,onClose:()->Unit) {
     }
     Text("${state.inventory.count{it.expirationDate==null}} items have no expiration date.")
    }
-   "low"->{Text("Low fill report",style=MaterialTheme.typography.titleLarge);Text("Items at 25% fill or below, including empty stock. This does not infer a reorder target.");val rows=remember(state.inventory){KitchenTools.lowFill(state.inventory)};if(rows.isEmpty())Text("No low-fill items.");PagedReport(rows){Text("${it.name} · ${it.quantity} ${it.containerType} · ${KitchenTools.format(it.level*100)}% fill")}}
+   "low"->{Text("Low fill report",style=MaterialTheme.typography.titleLarge);Text("Items at 25% fill or below, including empty stock. This does not infer a reorder target; adding to groceries combines with a matching unchecked row.");val rows=remember(state.inventory){KitchenTools.lowFill(state.inventory)};if(rows.isEmpty())Text("No low-fill items.");PagedReport(rows){item->Text("${item.name} · ${item.quantity} ${item.containerType} · ${KitchenTools.format(item.level*100)}% fill");TextButton(onClick={addGrocery(GroceryItem(name=item.name.trim(),sizeText=item.sizeAmount?.let{size->"${KitchenTools.format(size)} ${item.sizeUnit.orEmpty()}".trim()}.orEmpty()))}){Text("Add ${item.name} to groceries")}}}
    "duplicates"->{Text("Duplicate finder",style=MaterialTheme.typography.titleLarge);Text("Exact normalized names, zone and package sizes only. These are candidates to review in Inventory; nothing is merged automatically.");val groups=remember(state.inventory){KitchenTools.duplicates(state.inventory)};if(groups.isEmpty())Text("No exact duplicate candidates.");Text("${groups.size} duplicate groups");val candidates=remember(groups){groups.flatMap{group->group.map{item->item to group.size}}};PagedReport(candidates){(item,count)->Text("${item.name} · $count matching records",style=MaterialTheme.typography.titleMedium);Text("${item.quantity} ${item.containerType} · ${item.storageCategory}"+(item.sizeAmount?.let{value->" · ${KitchenTools.format(value)} ${item.sizeUnit.orEmpty()}"} ?: ""));HorizontalDivider()}}
    "snapshot"->PantrySnapshot(state)
    "convert"->ConversionTool()
-   else->KitchenTools.calculators.find{it.id==selected}?.let{tool->key(tool.id){CalculatorPanel(tool)}}
+   else->if(!showParityTool(selected,state))KitchenTools.calculators.find{it.id==selected}?.let{tool->key(tool.id){CalculatorPanel(tool)}}
   }
  }
 }

@@ -938,14 +938,16 @@
         }
       ],
       "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt",
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
         "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
-        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
       ],
       "acceptance_cases": [
         "Compare current stock with user par quantities without fabricating package conversion.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "remaining_gap": "Low-fill report can explicitly add a row to groceries; par targets remain.",
       "platform_equivalent": null
     },
     {
@@ -1067,7 +1069,7 @@
       "id": "tool-dietaryProfile",
       "feature": "Dietary Profile",
       "priority": "P1",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1078,19 +1080,22 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Persist dietary restrictions and apply allergen-safe review across recipes.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Device-local diet and allergen profile with recipe warnings ported; brand preferences and recipe-browser hiding remain.",
       "platform_equivalent": null
     },
     {
       "id": "tool-roulette",
       "feature": "Recipe Roulette",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1101,12 +1106,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Choose a real eligible recipe; no result invents missing ingredients or hides filters.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Eligible-recipe roulette with cuisine/favorite/allergen filters ported; animation is not replicated.",
       "platform_equivalent": null
     },
     {
@@ -1187,7 +1195,7 @@
       "id": "tool-substitutions",
       "feature": "Substitutions",
       "priority": "P1",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1198,12 +1206,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Show quantity ratios and dietary suitability; require explicit substitution acceptance.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Offline ratio table ported; user swaps, 73-entry database and diet-aware Worker results remain.",
       "platform_equivalent": null
     },
     {
@@ -1325,7 +1336,7 @@
       "id": "tool-thawPlanner",
       "feature": "Thaw Planner",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1336,12 +1347,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Plan fridge thaw dates from known stored items and persist reminders; food safety stays explicit.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Thaw estimate from exact weight units ported; reminder scheduling and meal-plan matching remain.",
       "platform_equivalent": null
     },
     {
@@ -1371,7 +1385,7 @@
       "id": "tool-splitCosts",
       "feature": "Shared Costs",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1382,12 +1396,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Split recorded bills fairly and round shares to exact total.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Cent-exact split and settle-up calculator ported; persisted/household-synced SharedExpense records remain.",
       "platform_equivalent": null
     },
     {
@@ -1486,7 +1503,7 @@
       "id": "tool-readiness",
       "feature": "Readiness",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1497,12 +1514,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Estimate emergency meals/days from known pantry quantities with clear unknowns.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Calorie/water estimate with unknown foods listed ported; recommended staples checklist remains.",
       "platform_equivalent": null
     },
     {
@@ -1532,7 +1552,7 @@
       "id": "tool-regional",
       "feature": "Regional",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1543,12 +1563,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Map region terms, temperatures and gas marks with source references.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Names, whole-word translator and oven steps ported; region preference and measurement-system switch remain.",
       "platform_equivalent": null
     },
     {
@@ -1578,7 +1601,7 @@
       "id": "tool-seasonal",
       "feature": "Seasonal Produce",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1589,19 +1612,22 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Use user region/month and sourced seasonal food lists with offline fallback.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "US monthly produce with in-stock flag ported; regional seasons remain.",
       "platform_equivalent": null
     },
     {
       "id": "tool-storageTips",
       "feature": "Storage Tips",
       "priority": "P2",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1612,19 +1638,22 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Display attributed safe storage guidance and avoid guessed expiry guarantees.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Reference table and search ported.",
       "platform_equivalent": null
     },
     {
       "id": "tool-shelfLife",
       "feature": "Shelf Life Lookup",
       "priority": "P1",
-      "android_status": "missing",
+      "android_status": "partial",
       "ios_sources": [
         {
           "path": "Stocked/KitchenToolboxView.swift",
@@ -1635,12 +1664,15 @@
           "exists": true
         }
       ],
-      "android_sources": [],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/ToolboxParity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/ToolboxParityScreens.kt"
+      ],
       "acceptance_cases": [
         "Search attributed food/storage shelf-life ranges and preserve uncertainty.",
         "Save/edit/restart/offline/error and Android accessibility behavior tested."
       ],
-      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "remaining_gap": "Reference table and search ported; source attribution display remains.",
       "platform_equivalent": null
     },
     {
@@ -1885,6 +1917,12 @@
       "Unsaved editor drafts are not fully persistent across process death.",
       "Read-only membership permits device-local edits; those edits do not sync.",
       "Oversized household documents fail safely at transport/import bounds."
-    ]
+    ],
+    "toolbox_batch": {
+      "date": "2026-10-09",
+      "summary": "Ported 10 iOS Kitchen Toolbox tools plus allergen warnings and low-fill grocery action as offline Android flows.",
+      "evidence": "ToolboxParityTest (9 tests) and KitchenToolsTest compiled with standalone kotlinc 2.1.0 and passed under JUnit 4.13.2; full Gradle unit/lint/assemble runs in GitHub Actions (no Android SDK in cloud container).",
+      "not_claimed": "No device, visual or accessibility acceptance; statuses moved from missing to partial only."
+    }
   }
 }
