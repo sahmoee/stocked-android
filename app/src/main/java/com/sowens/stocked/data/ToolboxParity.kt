@@ -76,6 +76,14 @@ object ToolboxParity {
  // Cost splitting (iOS CostSplitting.swift) in exact cents: shares always sum to the bill.
  data class Expense(val label:String,val amountCents:Long,val paidBy:String,val sharedWith:List<String> = emptyList())
  data class Settlement(val from:String,val to:String,val amountCents:Long)
+ /** Freeze a bill's participants; editing the people draft must not redistribute saved bills. */
+ fun recordedExpense(label:String,amountCents:Long,paidBy:String,people:List<String>):Expense {
+  val names=people.map{it.trim()}.filter{it.isNotEmpty()}.distinct()
+  require(names.size in 2..20 && paidBy in names){"Choose a payer from 2–20 people."}
+  require(names.none{n->n.any{it.isISOControl()}}){"Names cannot contain control characters."}
+  require(amountCents in 1..100000000){"Enter a positive amount up to 1,000,000."}
+  return Expense(label,amountCents,paidBy,names)
+ }
  fun parseCents(text:String):Long {
   val value=text.trim().toBigDecimalOrNull() ?: error("Enter an amount such as 12.50.")
   require(value.signum()>0 && value.scale()<=2 && value<=java.math.BigDecimal("1000000")){"Amount must be positive, at most 1,000,000 and use whole cents."}
@@ -111,7 +119,8 @@ object ToolboxParity {
  private fun liters(item:InventoryItem):Double? {
   val amount=item.sizeAmount?.takeIf{it.isFinite() && it>0} ?: return null
   val each=when(item.sizeUnit?.trim()?.lowercase(Locale.ROOT)){"l","liter","liters","litre","litres"->amount;"ml"->amount/1000;"gal","gallon","gallons"->amount*3.78541;"fl oz"->amount*0.0295735;else->return null}
-  return each*max(1,item.quantity)
+  val remaining=item.level.takeIf { it.isFinite() }?.coerceIn(0.0,1.0) ?: 0.0
+  return each*max(0,item.quantity)*remaining
  }
  fun readiness(items:List<InventoryItem>,people:Int,today:java.time.LocalDate=java.time.LocalDate.now()):Readiness {
   require(people in 1..50){"Household size must be between 1 and 50."}

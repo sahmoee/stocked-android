@@ -78,4 +78,17 @@ class ToolboxParityTest {
   assertEquals("white sugar + 1 tbsp molasses",ToolboxParity.substitutesFor("Brown sugar").single().substitute)
   assertTrue(ToolboxParity.substitutesFor("ham").isEmpty())
  }
+ @Test fun savedBillsKeepOriginalParticipantsWhenPeopleDraftChanges() {
+  val bill=ToolboxParity.recordedExpense("Lunch",1000,"Ana",listOf("Ana","Ben"))
+  val balances=ToolboxParity.balances(listOf(bill),listOf("Ana","Cy"))
+  assertEquals(-500L,balances.getValue("Ben")); assertEquals(0L,balances.getValue("Cy"))
+  assertTrue(runCatching{ToolboxParity.recordedExpense("Lunch",1000,"Ana",listOf("Ana","Ben\u001Eextra"))}.isFailure)
+ }
+ @Test fun readinessWaterUsesRemainingFillAndRejectsUnknownFill() {
+  fun water(fill:Double)=InventoryItem(name="Water",quantity=2,sizeAmount=1.0,sizeUnit="l",level=fill)
+  assertEquals(0.5,ToolboxParity.readiness(listOf(water(0.25)),1).waterLiters,1e-9)
+  assertEquals(0.0,ToolboxParity.readiness(listOf(water(0.0)),1).waterLiters,1e-9)
+  assertEquals(0.0,ToolboxParity.readiness(listOf(water(Double.NaN)),1).waterLiters,1e-9)
+ }
+
 }

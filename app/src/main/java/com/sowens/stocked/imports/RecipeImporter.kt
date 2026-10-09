@@ -86,7 +86,7 @@ object RecipeImporter {
         return Recipe(title = title, ingredients = ingredients.distinctBy { KitchenRules.key(it.name) }, instructions = steps, sourceURL = source, sourceName = metadata["source"], license = metadata["license"], servings = metadata["servings"]?.toIntOrNull()?.coerceIn(1,1000) ?: 4)
     }
     /** Stocked iOS prefixes spreadsheet-formula-like cells with ' on export; remove it on import. */
-    internal fun unguardCsvCell(value: String): String = if (value.length > 1 && value[0] == '\'' && value[1] in "=+-@\t\r") value.substring(1) else value
+    internal fun unguardCsvCell(value: String): String = if (value.length > 1 && value[0] == '\'' && value[1] in "'=+-@\t\r") value.substring(1) else value
     private fun csv(raw: String): List<Recipe> {
         val input = raw.replace("\r\n", "\n").replace('\r', '\n')
         val rows = mutableListOf<List<String>>(); val row = mutableListOf<String>(); val field = StringBuilder(); var quoted = false; var index = 0

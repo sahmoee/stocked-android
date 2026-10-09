@@ -37,4 +37,10 @@ class RecipeImporterTest {
         listOf("127.0.0.1","10.2.3.4","172.16.1.1","192.168.1.1","169.254.169.254","100.64.0.1","::1","fd00::1").forEach { assertTrue(it,RecipeWebFetcher.privateAddress(java.net.InetAddress.getByName(it))) }
         assertFalse(RecipeWebFetcher.privateAddress(java.net.InetAddress.getByName("8.8.8.8")))
     }
+    @org.junit.Test fun escapedLiteralApostrophesRoundTrip() {
+        org.junit.Assert.assertEquals("'=literal", RecipeImporter.unguardCsvCell("''=literal"))
+        org.junit.Assert.assertEquals("'Nduja", RecipeImporter.unguardCsvCell("''Nduja"))
+        org.junit.Assert.assertEquals("'Nduja", RecipeImporter.unguardCsvCell("'Nduja"))
+        org.junit.Assert.assertEquals("=SUM(A1)", RecipeImporter.unguardCsvCell("'=SUM(A1)"))
+    }
 }

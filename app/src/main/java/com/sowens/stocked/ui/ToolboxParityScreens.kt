@@ -91,24 +91,24 @@ fun showParityTool(id: String, state: KitchenState): Boolean {
     var expenses by rememberSaveable { mutableStateOf(listOf<String>()) }
     var error by remember { mutableStateOf<String?>(null) }
     val names = people.split(",").map { it.trim() }.filter { it.isNotEmpty() }.distinct()
-    val parsed = expenses.mapNotNull { row -> row.split("\u001F").takeIf { it.size == 3 }?.let { ToolboxParity.Expense(it[0], it[1].toLong(), it[2]) } }
+    val parsed = expenses.mapNotNull { row -> row.split("\u001F").takeIf { it.size == 3 || it.size == 4 }?.let { fields -> fields[1].toLongOrNull()?.let { cents -> ToolboxParity.Expense(fields[0], cents, fields[2], fields.getOrNull(3)?.split("\u001E") ?: names) } } }
     Heading("Split costs", "Shares are calculated in exact cents and always add up to each bill. This calculator stays on this screen; it is not saved or synced.")
     Field("People, separated by commas", people, { people = it })
     Field("What was bought", label, { label = it })
     Field("Amount", amount, { amount = it }, true)
-    Text("Paid by"); Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { names.take(6).forEach { name -> FilterChip(selected = payer == name, onClick = { payer = name }, label = { Text(name) }) } }
+    Text("Paid by"); Column { names.forEach { name -> FilterChip(selected = payer == name, onClick = { payer = name }, label = { Text(name) }) } }
     error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
     Button(onClick = { error = runCatching {
         require(names.size in 2..20) { "Enter between 2 and 20 people." }
         require(payer in names) { "Choose who paid." }
         require(expenses.size < 200) { "Up to 200 bills per calculation." }
-        val cents = ToolboxParity.parseCents(amount)
-        expenses = expenses + listOf(label.trim().ifEmpty { "Expense" }.replace("\u001F", " ").take(120), cents.toString(), payer).joinToString("\u001F"); label = ""; amount = ""
+        val bill = ToolboxParity.recordedExpense(label.trim().ifEmpty { "Expense" }.filterNot { it.isISOControl() }.take(120), ToolboxParity.parseCents(amount), payer, names)
+        expenses = expenses + listOf(bill.label, bill.amountCents.toString(), bill.paidBy, bill.sharedWith.joinToString("\u001E")).joinToString("\u001F"); label = ""; amount = ""
     }.exceptionOrNull()?.message }) { Text("Add bill") }
     if (parsed.isNotEmpty()) {
         parsed.forEach { Text("${it.label} · ${ToolboxParity.money(it.amountCents)} paid by ${it.paidBy}") }
         Text("Total ${ToolboxParity.money(parsed.sumOf { it.amountCents })}", style = MaterialTheme.typography.titleMedium)
-        val everyone = (names + parsed.map { it.paidBy }).distinct()
+        val everyone = (parsed.flatMap { it.sharedWith } + parsed.map { it.paidBy }).distinct()
         ToolboxParity.balances(parsed, everyone).forEach { (name, cents) -> Text("$name · ${if (cents >= 0) "is owed" else "owes"} ${ToolboxParity.money(kotlin.math.abs(cents))}") }
         Text("Settle up", style = MaterialTheme.typography.titleMedium)
         val settle = ToolboxParity.settlements(parsed, everyone)
@@ -147,7 +147,7 @@ fun showParityTool(id: String, state: KitchenState): Boolean {
     Text("${candidates.size} eligible recipes")
     Button(onClick = { pickedId = ToolboxParity.spin(candidates, avoidId = pickedId)?.id }, enabled = candidates.isNotEmpty()) { Text("Pick a recipe") }
     if (candidates.isEmpty()) Text(if (state.userRecipes.isEmpty()) "Save a few recipes first." else "No recipes match these filters.")
-    state.userRecipes.firstOrNull { it.id == pickedId }?.let { Text(it.title, style = MaterialTheme.typography.headlineSmall); Text("${it.servings} servings · ${it.ingredients.size} ingredients" + (it.cuisine.takeIf { c -> c.isNotBlank() }?.let { c -> " · $c" } ?: "")) }
+    candidates.firstOrNull { it.id == pickedId }?.let { Text(it.title, style = MaterialTheme.typography.headlineSmall); Text("${it.servings} servings · ${it.ingredients.size} ingredients" + (it.cuisine.takeIf { c -> c.isNotBlank() }?.let { c -> " · $c" } ?: "")) }
 }
 
 @Composable private fun DietaryProfileTool() {
