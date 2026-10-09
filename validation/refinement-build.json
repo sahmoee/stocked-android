@@ -80,6 +80,17 @@
       "review": "Coordinator reviewed final narrow diff; no material findings",
       "signed_artifacts": "Prior signed artifacts belong to c84fc5a; no new APK/AAB build in this code batch",
       "limitations": "No device, mixed household or visual parity acceptance; full parity remains incomplete"
+    },
+    "reference_review": {
+      "iOS_commit": "b4bf8fae584458c6f70912bacd64c4f4854c705a",
+      "tracked_files": 126,
+      "owner_review": "Coordinator reviewed iOS PR7 import/export/share hardening and backup safety. Android review confirmed CSV guard compatibility, stable backup order and strict restore validation; shared household schema unchanged. UI/share image/widget gaps remain in audit.",
+      "parity_groups": {
+        "missing": 33,
+        "partial": 32,
+        "platform_equivalent_missing": 2
+      },
+      "status": "Fingerprints track reviewed source only; no full feature/device parity claim"
     }
   }
 }
