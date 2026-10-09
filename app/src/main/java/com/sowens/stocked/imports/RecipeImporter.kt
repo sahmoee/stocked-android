@@ -85,12 +85,15 @@ object RecipeImporter {
         require(ingredients.isNotEmpty() || steps.isNotEmpty()) { "Include ingredients or cooking steps." }
         return Recipe(title = title, ingredients = ingredients.distinctBy { KitchenRules.key(it.name) }, instructions = steps, sourceURL = source, sourceName = metadata["source"], license = metadata["license"], servings = metadata["servings"]?.toIntOrNull()?.coerceIn(1,1000) ?: 4)
     }
-    private fun csv(input: String): List<Recipe> {
+    /** Stocked iOS prefixes spreadsheet-formula-like cells with ' on export; remove it on import. */
+    internal fun unguardCsvCell(value: String): String = if (value.length > 1 && value[0] == '\'' && value[1] in "'=+-@\t\r") value.substring(1) else value
+    private fun csv(raw: String): List<Recipe> {
+        val input = raw.replace("\r\n", "\n").replace('\r', '\n')
         val rows = mutableListOf<List<String>>(); val row = mutableListOf<String>(); val field = StringBuilder(); var quoted = false; var index = 0
         while(index < input.length) { val char = input[index]; when { char == '"' -> if(quoted && index+1<input.length && input[index+1]=='"') { field.append('"'); index++ } else quoted = !quoted; char == ',' && !quoted -> { row += field.toString(); field.setLength(0) }; char == '\n' && !quoted -> { row += field.toString().trimEnd('\r'); field.setLength(0); rows += row.toList(); row.clear() }; else -> field.append(char) }; index++ }
         require(!quoted) { "CSV contains an unfinished quoted field." }; if(field.isNotEmpty() || row.isNotEmpty()) { row += field.toString(); rows += row.toList() }
         require(rows.isNotEmpty()); val header = rows.first().map { it.trim().lowercase() }; require("title" in header) { "CSV needs a title column." }
-        return rows.drop(1).filter { it.any { field -> field.isNotBlank() } }.map { values -> fun get(key:String):String = header.indexOf(key).takeIf { it>=0 }?.let { values.getOrNull(it) }.orEmpty()
+        return rows.drop(1).filter { it.any { field -> field.isNotBlank() } }.map { values -> fun get(key:String):String = unguardCsvCell(header.indexOf(key).takeIf { it>=0 }?.let { values.getOrNull(it) }.orEmpty())
             Recipe(title = get("title"), description = get("description"), servings = get("servings").toIntOrNull()?.coerceIn(1,1000) ?: 4, ingredients = get("ingredients").split('\n',';').filter { it.isNotBlank() }.map { Ingredient(name=it.trim()) }, instructions = get("instructions").split('\n',';').filter { it.isNotBlank() }, sourceURL=get("sourceurl").ifBlank { null }, license=get("license").ifBlank { null }) }
     }
 }

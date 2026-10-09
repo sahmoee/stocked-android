@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: sahmoee/stocked
-          ref: codex/android-native
+          ref: claude/serene-wright-6wfqzt
           path: ios-reference
           persist-credentials: false
       - run: python3 scripts/check-ios-reference.py ios-reference

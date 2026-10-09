@@ -81,6 +81,11 @@ private fun RecipeDetail(recipe: Recipe, pantry: List<InventoryItem>, back: () -
     var confirmDelete by remember { mutableStateOf(false) }
     LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp), contentPadding = PaddingValues(bottom = 24.dp)) {
         item { TextButton(onClick = back) { Text("Back to recipes") }; Text(recipe.title, style = MaterialTheme.typography.headlineMedium); Text(recipe.description) }
+        item {
+            val context = LocalContext.current
+            val allergenHits = remember(recipe.ingredients) { ToolboxParity.allergenMatches(recipe, DietaryProfileStore.load(context).allergens) }
+            if (allergenHits.isNotEmpty()) Text("Check your saved allergens: " + allergenHits.joinToString("; ") { "${it.first} — ${it.second}" } + ". Keyword review only; always check product labels.", color = MaterialTheme.colorScheme.error)
+        }
         item { cookError?.let { Text(it,color=MaterialTheme.colorScheme.error) }; Button(enabled=!starting,onClick={ cook(servings) }) { Text("Start cooking") }; FlowRow { TextButton(onClick=favorite) { Text(if(recipe.isFavorited) "Remove favorite" else "Favorite") }; TextButton(onClick = edit) { Text("Edit") }; TextButton(onClick = groceries) { Text("Add to groceries") }; TextButton(onClick = plan) { Text("Plan meal") }; TextButton(onClick = { confirmDelete = true }) { Text("Delete") } } }
         item { Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) { Button(onClick = { servings-- }, enabled = servings > 1, modifier = Modifier.semantics { contentDescription = "Decrease servings" }) { Text("−") }; Text("$servings servings", Modifier.padding(top = 12.dp)); Button(onClick = { servings++ }, enabled = servings < 1000, modifier = Modifier.semantics { contentDescription = "Increase servings" }) { Text("+") } }; Text("Numbers and common fractions scale for recognized units. Other amounts are marked for manual adjustment.", style = MaterialTheme.typography.bodySmall) }
         item {

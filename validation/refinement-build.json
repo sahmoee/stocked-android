@@ -25,7 +25,21 @@
     "Concurrent household quantity rebasing",
     "Decimal-encoded quantity delta handling",
     "Offline pantry and calculation toolbox",
-    "Scheduled iOS reference drift check"
+    "Scheduled iOS reference drift check",
+    "Regional ingredient names with whole-word single-pass translator",
+    "Oven temperature and gas mark table",
+    "Thaw planner using exact weight units only",
+    "Cent-exact cost splitting and settle-up",
+    "Emergency readiness estimate listing uncounted foods",
+    "Allergen-aware recipe roulette",
+    "Device-local dietary and allergen profile",
+    "Recipe detail allergen keyword warning",
+    "Offline ingredient substitutions with ratios",
+    "Shelf life lookup",
+    "Storage tips reference",
+    "Seasonal produce with in-stock flag",
+    "Low-fill report explicit add-to-groceries",
+    "Recipe CSV import accepts iOS formula-guarded cells, CRLF/CR rows and BOM"
   ],
   "validation": {
     "unit_tests": 98,
@@ -35,7 +49,8 @@
     "ios_reference_files": 125,
     "claude_review": "Focused sync follow-up reports no material issues",
     "release_signature": "apksigner verify passed",
-    "alignment": "zipalign -c -P16 4 passed"
+    "alignment": "zipalign -c -P16 4 passed",
+    "toolbox_batch": "ToolboxParityTest 9/9 and KitchenToolsTest passed via standalone kotlinc+JUnit (18 tests); iOS reference drift gate: 125 files match; Gradle tests/lint/APK via GitHub Actions"
   },
   "limitations": [
     "Full feature/UI parity still incomplete; audit records gaps",
@@ -43,6 +58,39 @@
     "No live two-device household or physical lifecycle acceptance",
     "Read-only roles retain unsynced device-local edits",
     "Whole household documents bounded at transport/import limit",
-    "Editor drafts not fully durable across process death"
-  ]
+    "Editor drafts not fully durable across process death",
+    "New toolbox screens not yet visually or device verified; split-cost bills and dietary profile are device-local, not household-synced"
+  ],
+  "codex_takeover": {
+    "date": "2026-10-09",
+    "source_base": "3a62502e15739774d2105cc7113213253babd30a",
+    "fixes": [
+      "Saved cost bills retain original participants when people draft changes",
+      "All supported payers can be selected without clipped horizontal controls",
+      "Water readiness uses remaining fill, with empty/non-finite fill counted as zero",
+      "Recipe roulette hides previous pick excluded by changed filters",
+      "iOS formula guard decoding preserves doubled literal apostrophes"
+    ],
+    "validation": {
+      "unit_tests": 111,
+      "failures": 0,
+      "errors": 0,
+      "lint_errors": 0,
+      "gradle": "testDebugUnitTest lintDebug --max-workers=2 --no-daemon BUILD SUCCESSFUL",
+      "review": "Coordinator reviewed final narrow diff; no material findings",
+      "signed_artifacts": "Prior signed artifacts belong to c84fc5a; no new APK/AAB build in this code batch",
+      "limitations": "No device, mixed household or visual parity acceptance; full parity remains incomplete"
+    },
+    "reference_review": {
+      "iOS_commit": "b4bf8fae584458c6f70912bacd64c4f4854c705a",
+      "tracked_files": 126,
+      "owner_review": "Coordinator reviewed iOS PR7 import/export/share hardening and backup safety. Android review confirmed CSV guard compatibility, stable backup order and strict restore validation; shared household schema unchanged. UI/share image/widget gaps remain in audit.",
+      "parity_groups": {
+        "missing": 33,
+        "partial": 32,
+        "platform_equivalent_missing": 2
+      },
+      "status": "Fingerprints track reviewed source only; no full feature/device parity claim"
+    }
+  }
 }
