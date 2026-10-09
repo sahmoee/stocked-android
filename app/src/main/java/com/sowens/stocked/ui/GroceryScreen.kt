@@ -16,7 +16,8 @@ fun GroceryScreen(state: KitchenState, save: (GroceryItem) -> Unit, delete: (Str
     var editing by remember { mutableStateOf<GroceryItem?>(null) }
     var bought by remember { mutableStateOf(false) }
     var query by remember(initialQuery) { mutableStateOf(initialQuery) }
-    Column(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(Modifier.fillMaxSize().padding(horizontal=16.dp),contentPadding=PaddingValues(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        item { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
         val left=state.grocery.count { !it.isChecked }
         EditorialHero("Your next grocery trip", if(left==0) "Nothing to buy yet." else "$left things for a well-stocked week.", "Organized for an easier shop.", produceArtwork())
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { FilterChip(selected=!bought,onClick={ bought=false },label={ Text("To Buy · $left") }); FilterChip(selected=bought,onClick={ bought=true },label={ Text("Bought · ${state.grocery.count { it.isChecked }}") }) }
@@ -25,14 +26,13 @@ fun GroceryScreen(state: KitchenState, save: (GroceryItem) -> Unit, delete: (Str
         Text("${state.grocery.count { !it.isChecked }} items left to buy")
         if (state.grocery.isEmpty()) EmptyState("Ready for your next shop", "Add groceries here or send recipe ingredients to this list. Matching unchecked entries are combined.")
         if (state.grocery.isNotEmpty() && state.grocery.none { it.name.contains(query, true) }) EmptyState("No matching groceries", "Try a different name or add the item.")
-        LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+        } }
             items(state.grocery.filter { it.name.contains(query, true) && it.isChecked==bought }.sortedBy { it.isChecked }, key = { it.id }) { item ->
                 StockedCard(Modifier.fillMaxWidth().padding(vertical = 4.dp)) { Column(Modifier.padding(12.dp)) {
                     Row { Checkbox(checked = item.isChecked, onCheckedChange = { toggle(item.id) }, modifier = Modifier.semantics { contentDescription = "${item.name}: purchased" }); Column(Modifier.weight(1f)) { Text(item.name, style = MaterialTheme.typography.titleMedium); Text("${item.quantity} · ${item.sizeText}"); if (item.recipeSource.isNotBlank()) Text("For ${item.recipeSource}") } }
                     Row { TextButton(onClick = { editing = item }) { Text("Edit") }; TextButton(onClick = { delete(item.id) }) { Text("Delete") } }
                 } }
             }
-        }
     }
     editing?.let { item ->
         var name by remember(item.id) { mutableStateOf(item.name) }; var quantity by remember { mutableStateOf(item.quantity.toString()) }; var size by remember { mutableStateOf(item.sizeText) }

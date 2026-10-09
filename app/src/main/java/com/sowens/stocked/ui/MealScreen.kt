@@ -16,11 +16,12 @@ import java.time.LocalDate
 fun MealScreen(state: KitchenState, pending: Recipe?, clearPending: () -> Unit, save: (PlannedMeal) -> Unit, delete: (String) -> Unit, groceries: (String) -> Unit, cooked: (String) -> Unit, browseRecipes: () -> Unit = {}) {
     var editing by remember { mutableStateOf<PlannedMeal?>(null) }
     LaunchedEffect(pending?.id) { pending?.let { editing = PlannedMeal(title = it.title, servings = it.servings, ingredients = it.ingredients.map { ingredient -> "${ingredient.amount} ${ingredient.name}".trim() }, date = LocalDate.now().toString()); clearPending() } }
-    Column(Modifier.fillMaxSize().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    LazyColumn(Modifier.fillMaxSize().padding(horizontal=16.dp),contentPadding=PaddingValues(bottom=24.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
+        item { Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
         EditorialHero("Make something good", "What’s on the menu?", "Good food starts with what you have. Cook something now, or plan the week ahead.", mealArtwork())
         FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) { OutlinedButton(onClick=browseRecipes) { Text("My recipes & timers") }; Button(onClick = { editing = PlannedMeal(title = "", date = LocalDate.now().toString()) }) { Text("Plan meal") } }
         if (state.planned.isEmpty()) EmptyState("Make room for dinner", "Choose a date and meal, or plan a saved recipe from its detail screen.")
-        LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
+        } }
             items(state.planned.sortedBy { it.date ?: "9999" }, key = { it.id }) { meal ->
                 StockedCard(Modifier.fillMaxWidth().padding(vertical = 4.dp)) { Column(Modifier.padding(16.dp)) {
                     Text(meal.title, style = MaterialTheme.typography.titleLarge)
@@ -29,7 +30,6 @@ fun MealScreen(state: KitchenState, pending: Recipe?, clearPending: () -> Unit, 
                     FlowRow { TextButton(onClick = { editing = meal }) { Text("Edit") }; TextButton(onClick = { groceries(meal.id) }) { Text("Groceries") }; TextButton(onClick = { cooked(meal.id) }, enabled = !meal.isCooked) { Text("Mark cooked") }; TextButton(onClick = { delete(meal.id) }) { Text("Delete") } }
                 } }
             }
-        }
     }
     editing?.let { meal ->
         var title by remember(meal.id) { mutableStateOf(meal.title) }; var date by remember { mutableStateOf(meal.date ?: LocalDate.now().plusDays(meal.dayIndex.toLong()).toString()) }; var type by remember { mutableStateOf(meal.mealType) }; var servings by remember { mutableStateOf(meal.servings.toString()) }; var ingredients by remember { mutableStateOf(meal.ingredients.joinToString("\n")) }

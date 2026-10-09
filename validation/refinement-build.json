@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-09",
+  "scope": "Reviewed iOS parity refinement; preview, not complete parity",
+  "improvements": [
+    "iOS-style Cook Now/Cook Later hub",
+    "Resumable guided cooking snapshots",
+    "Idempotent cook completion",
+    "Cook history persistence",
+    "Stale cooking-session action protection",
+    "Swift-required nutrition wire normalization",
+    "Stable recipe ingredient IDs and metadata editing",
+    "Recipe editor commit-time concurrency merge",
+    "Inventory editor commit-time concurrency merge",
+    "Typed inventory container and storage metadata",
+    "Recipe provenance presentation",
+    "Supplied ingredient nutrition presentation",
+    "Local calendar expiration/DST interchange",
+    "Stable recipe creation dates",
+    "Non-destructive imported cook-history merging",
+    "Durable incoming recipe share retention",
+    "Semantic cross-platform household comparison",
+    "Android-only field preservation on iOS updates",
+    "Malformed household row quarantine",
+    "Accepted household push recovery journal",
+    "Concurrent household quantity rebasing",
+    "Decimal-encoded quantity delta handling",
+    "Offline pantry and calculation toolbox",
+    "Scheduled iOS reference drift check"
+  ],
+  "validation": {
+    "unit_tests": 98,
+    "failures": 0,
+    "lint_errors": 0,
+    "build": "Debug APK, signed release APK and signed AAB passed",
+    "ios_reference_files": 125,
+    "claude_review": "Focused sync follow-up reports no material issues",
+    "release_signature": "apksigner verify passed",
+    "alignment": "zipalign -c -P16 4 passed"
+  },
+  "limitations": [
+    "Full feature/UI parity still incomplete; audit records gaps",
+    "No latest device installation: Steam Deck SSH timed out",
+    "No live two-device household or physical lifecycle acceptance",
+    "Read-only roles retain unsynced device-local edits",
+    "Whole household documents bounded at transport/import limit",
+    "Editor drafts not fully durable across process death"
+  ]
+}

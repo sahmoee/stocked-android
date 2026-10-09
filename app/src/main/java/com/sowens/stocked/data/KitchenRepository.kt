@@ -41,6 +41,7 @@ class KitchenRepository private constructor(context:Context) {
  private suspend fun mutate(notifyLocal:Boolean=true,transform:(KitchenState)->KitchenState) = withContext(Dispatchers.IO) { mutex.withLock {
   check(initialized) { "Kitchen is still loading." }
   val next=transform(mutableState.value)
+  if(next==mutableState.value)return@withLock
   val bytes=BackupCodec.json.encodeToString(next).toByteArray(Charsets.UTF_8)
   require(bytes.size <= 20*1024*1024) { "Kitchen data exceeds the safe storage limit." }
   var output:java.io.FileOutputStream?=null
@@ -55,9 +56,13 @@ class KitchenRepository private constructor(context:Context) {
  }
  private fun now()=System.currentTimeMillis().toDouble()
  private fun <T> upsert(values:List<T>, item:T, id:(T)->String):List<T> = if(values.any{id(it)==id(item)})values.map{if(id(it)==id(item))item else it} else values+item
+ /** Resolve the live row inside the same lock as the durable write. */
+ suspend fun saveInventoryEdit(draft:InventoryItem,baseline:InventoryItem?)=mutate{InventoryCommitPolicy.apply(it,draft,baseline,now())}
  suspend fun upsertInventory(item:InventoryItem) { KitchenRules.validate(item); mutate{it.copy(inventory=upsert(it.inventory,item.copy(name=item.name.trim(),updatedAt=now())){a->a.id})} }
  suspend fun upsertGrocery(item:GroceryItem) { KitchenRules.validate(item); mutate{state->state.copy(grocery=if(state.grocery.any{it.id==item.id})upsert(state.grocery,item.copy(name=item.name.trim(),updatedAt=now())){it.id} else KitchenRules.addGrocery(state.grocery,item.copy(name=item.name.trim(),updatedAt=now())))} }
- suspend fun upsertRecipe(item:Recipe) { KitchenRules.validate(item); mutate{it.copy(userRecipes=upsert(it.userRecipes,item.copy(title=item.title.trim(),updatedAt=now())){a->a.id})} }
+ /** Preserve edits/cooking/sync changes that arrived after the editor opened. */
+ suspend fun saveRecipeEdit(draft:Recipe,baseline:Recipe?)=mutate{RecipeCommitPolicy.apply(it,draft,baseline,now())}
+ suspend fun upsertRecipe(item:Recipe) { KitchenRules.validate(item); mutate{state->val timestamp=now();val stored=state.userRecipes.find{it.id==item.id};val prepared=RecipePersistence.prepare(item,stored,timestamp);state.copy(userRecipes=upsert(state.userRecipes,prepared){a->a.id})} }
  suspend fun upsertMeal(item:PlannedMeal) { KitchenRules.validate(item); mutate{it.copy(planned=upsert(it.planned,item.copy(title=item.title.trim(),updatedAt=now())){a->a.id})} }
  suspend fun deleteInventory(id:String)=mutate{it.copy(inventory=it.inventory.filterNot{row->row.id==id})}
  suspend fun deleteGrocery(id:String)=mutate{it.copy(grocery=it.grocery.filterNot{row->row.id==id})}
@@ -69,6 +74,8 @@ class KitchenRepository private constructor(context:Context) {
   val next=KitchenRules.consume(item,quantity,now())
   state.copy(inventory=state.inventory.map{if(it.id==id)next else it})
  }
+ /** Idempotent completion; inventory deduction requires a separate explicit review. */
+ suspend fun completeRecipeCook(recipeId:String,completionToken:String)=mutate{LocalRecipeCompletion.apply(it,recipeId,completionToken,now())}
  suspend fun completeMeal(id:String)=mutate{it.copy(planned=it.planned.map{row->if(row.id==id)row.copy(isCooked=true,updatedAt=now())else row})}
  suspend fun addRecipeGroceries(id:String)=mutate{state->
   val recipe=state.userRecipes.find{it.id==id} ?: error("Recipe no longer exists.")

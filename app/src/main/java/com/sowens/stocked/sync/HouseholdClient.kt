@@ -57,7 +57,10 @@ class HouseholdClient(context:Context,private val repository:KitchenRepository,p
  private val appContext=context.applicationContext
  private var automatic:HouseholdScheduler?=null
  fun startAutomaticSync(){synchronized(this){if(automatic==null)automatic=HouseholdScheduler(appContext,repository,this,endpoint).also{it.start()}}}
- fun pendingWork():Boolean { val j=journal(repository.state.value); if(j["pending"]!=null)return true;if(code().isEmpty() || role() in setOf("kid","viewer","readonly","readOnly"))return false;val base=j["baseline"]?.jsonObject ?: JsonObject(emptyMap());val current=HouseholdWire.document(repository.state.value);return HouseholdWire.collections.any{HouseholdWire.rows(base,it.key)!=HouseholdWire.rows(current,it.key)} }
+ fun pendingWork():Boolean { val state=repository.state.value;val j=journal(state); if(j["pending"]!=null || j["acceptedSnapshot"]!=null)return true;if(code().isEmpty() || role() in setOf("kid","viewer","readonly","readOnly"))return false;return HouseholdWire.changed(j["baseline"]?.jsonObject ?: JsonObject(emptyMap()),localDocument(state)) }
+ /** Local rows plus quarantined server rows, so unreadable household records are never sent as deletions. */
+ private fun localDocument(state:KitchenState)=HouseholdWire.withQuarantine(HouseholdWire.document(state),journal(state)["quarantine"] as? JsonObject)
+ private fun quarantineStatus(state:KitchenState)=(journal(state)["quarantine"] as? JsonObject).orEmpty().values.sumOf{(it as? JsonArray)?.size ?: 0}.let{if(it==0)"" else " $it household record(s) could not be read on Android and are kept unchanged."}
  private val status=MutableStateFlow("Manual sync ready")
  val message=status.asStateFlow()
  private fun journal(state:KitchenState)=state.extra[JOURNAL] as? JsonObject ?: JsonObject(emptyMap())
@@ -86,17 +89,18 @@ class HouseholdClient(context:Context,private val repository:KitchenRepository,p
   val response=call(if(joinCode==null)"create" else "join",buildJsonObject{put("memberId",identity.first);put("memberName",name.trim());put("ownerName",name.trim());if(joinCode!=null)put("code",supplied);if(token.isNotEmpty())put("invite",token)},identity)
   val remote=response["household"]?.jsonObject ?: error("Missing household response.")
   repository.transformState { local ->
-   val merged=HouseholdWire.merge(JsonObject(emptyMap()),HouseholdWire.document(local),remote)
-   save(HouseholdWire.kitchen(merged,local),buildJsonObject{put("code",remote.getValue("code"));put("name",name.trim());put("baseline",remote);put("role",memberRole(remote,identity.first));put("revision",remote["revision"] ?: JsonPrimitive(0))})
-  };status.value="Household connected. Your local entries are retained and will sync when connected.";startAutomaticSync();automatic?.connected()
+   val (merged,baseline)=HouseholdWire.reconcile(JsonObject(emptyMap()),HouseholdWire.document(local),remote)
+   val decoded=HouseholdWire.decode(merged,local)
+   save(decoded.state,buildJsonObject{put("code",remote.getValue("code"));put("name",name.trim());put("baseline",baseline);put("quarantine",decoded.quarantine);put("role",memberRole(remote,identity.first));put("revision",remote["revision"] ?: JsonPrimitive(0))})
+  };status.value="Household connected. Your local entries are retained and will sync when connected."+quarantineStatus(repository.state.value);startAutomaticSync();automatic?.connected()
  }
  private fun memberRole(remote:JsonObject,id:String)=if(remote["ownerId"]?.jsonPrimitive?.content==id)"owner" else (remote["members"] as? JsonArray).orEmpty().map{it.jsonObject}.find{it["memberId"]?.jsonPrimitive?.content==id}?.get("role")?.jsonPrimitive?.content ?: "viewer"
  suspend fun sync()=runWork {
   val identity=vault.identity();var local=repository.state.value;var j=journal(local);require(code().isNotEmpty()){ "Create or join a household first." }
   require(System.currentTimeMillis()>=(j["retryAfter"]?.jsonPrimitive?.longOrNull ?: 0)){"Sync paused after a failure. Try later; changes remain saved."}
   try {
-   if(j["pending"]==null && role() !in setOf("kid","viewer","readonly","readOnly")) {
-    repository.transformState{ state -> val current=journal(state);val snapshot=HouseholdWire.document(state);val batch=HouseholdWire.batch(current["baseline"]?.jsonObject ?: JsonObject(emptyMap()),snapshot,current["revision"]?.jsonPrimitive?.longOrNull ?: 0)
+   if(j["pending"]==null && j["acceptedSnapshot"]==null && role() !in setOf("kid","viewer","readonly","readOnly")) {
+    repository.transformState{ state -> val current=journal(state);val snapshot=localDocument(state);val batch=HouseholdWire.batch(current["baseline"]?.jsonObject ?: JsonObject(emptyMap()),snapshot,current["revision"]?.jsonPrimitive?.longOrNull ?: 0)
      require(role() !in setOf("member","teen") || batch.getValue("operations").jsonArray.none{op->val row=op.jsonObject;row["operationType"]?.jsonPrimitive?.content=="delete" && row["entityType"]?.jsonPrimitive?.content in setOf("inventoryItem","groceryItem")}){"Your household role cannot delete shared inventory or groceries. Restore those local entries before syncing, or ask the owner to change your role."}
      if(batch.getValue("operations").jsonArray.isEmpty())state else save(state,JsonObject(current+("pending" to batch)+("snapshot" to HouseholdWire.sentSnapshot(current["baseline"]?.jsonObject ?: JsonObject(emptyMap()),snapshot,batch)))) }
    }
@@ -112,10 +116,16 @@ class HouseholdClient(context:Context,private val repository:KitchenRepository,p
     repository.transformState{state->val current=journal(state);save(state,JsonObject(current+("pending" to JsonObject(pending+("requestId" to JsonPrimitive(UUID.randomUUID().toString()))))))}
     error("Some changes were rejected. Pending changes are retained for review; no local records were replaced.")
    }}
-   repository.transformState { state -> val current=journal(state);val base=if(pending!=null)current.getValue("snapshot").jsonObject else current["baseline"]?.jsonObject ?: JsonObject(emptyMap());val merged=HouseholdWire.merge(base,HouseholdWire.document(state),remote)
-    save(HouseholdWire.kitchen(merged,state),JsonObject(current.filterKeys{it !in setOf("pending","snapshot","retryAfter","failures")}+("baseline" to remote)+("revision" to (remote["revision"] ?: JsonPrimitive(0)))+("role" to JsonPrimitive(memberRole(remote,identity.first))))) }
+   // A fully acknowledged push must never remain queued if local reconciliation fails.
+   // Preserve its exact sent snapshot as a recovery base; local records stay untouched.
+   if(pending!=null)repository.transformState { state -> val current=journal(state)
+    save(state,HouseholdWire.acknowledgeJournal(current))
+   }
+   repository.transformState { state -> val current=journal(state);val base=HouseholdWire.reconciliationBase(current);val (merged,baseline)=HouseholdWire.reconcile(base,localDocument(state),remote);val decoded=HouseholdWire.decode(merged,state)
+    save(decoded.state,JsonObject(current.filterKeys{it !in setOf("pending","snapshot","acceptedSnapshot","retryAfter","failures")}+("baseline" to baseline)+("quarantine" to decoded.quarantine)+("revision" to (remote["revision"] ?: JsonPrimitive(0)))+("role" to JsonPrimitive(memberRole(remote,identity.first))))) }
    status.value=if(role() in setOf("kid","viewer","readonly","readOnly"))"Read-only household refreshed; local edits remain on this device." else "Household synced. Offline edits are saved on this device."
+   status.value+=quarantineStatus(repository.state.value)
   } catch(e:Exception){if(e is kotlinx.coroutines.CancellationException)throw e;repository.transformState{state->val current=journal(state);val failures=((current["failures"]?.jsonPrimitive?.intOrNull ?: 0)+1).coerceAtMost(8);save(state,JsonObject(current+("failures" to JsonPrimitive(failures))+("retryAfter" to JsonPrimitive(System.currentTimeMillis()+minOf(300000L,5000L*(1L shl failures))))))};throw e}
  }
- suspend fun leave()=runWork {val identity=vault.identity();val j=journal(repository.state.value);require(j["pending"]==null){"Sync pending changes before leaving; your local data is preserved."};call("leave",buildJsonObject{put("code",j.getValue("code"));put("memberId",identity.first);put("actorId",identity.first)},identity);repository.transformState{it.copy(extra=JsonObject(it.extra.filterKeys{key->key!=JOURNAL}))};status.value="Left household. Local kitchen retained.";automatic?.disconnected()}
+ suspend fun leave()=runWork {val identity=vault.identity();val j=journal(repository.state.value);require(j["pending"]==null && j["acceptedSnapshot"]==null){"Sync pending changes before leaving; your local data is preserved."};call("leave",buildJsonObject{put("code",j.getValue("code"));put("memberId",identity.first);put("actorId",identity.first)},identity);repository.transformState{it.copy(extra=JsonObject(it.extra.filterKeys{key->key!=JOURNAL}))};status.value="Left household. Local kitchen retained.";automatic?.disconnected()}
 }

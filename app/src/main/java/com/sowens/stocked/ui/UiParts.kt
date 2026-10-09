@@ -19,9 +19,9 @@ fun EmptyState(title: String, detail: String) {
 }
 
 @Composable
-fun Field(label: String, value: String, change: (String) -> Unit, numeric: Boolean = false, lines: Int = 1) {
+fun Field(label: String, value: String, change: (String) -> Unit, numeric: Boolean = false, lines: Int = 1, enabled:Boolean=true) {
     OutlinedTextField(value, change, label = { Text(label) }, modifier = Modifier.fillMaxWidth(),
-        singleLine = lines == 1, minLines = lines,
+        singleLine = lines == 1, minLines = lines, enabled=enabled,
         keyboardOptions = KeyboardOptions(keyboardType = if (numeric) KeyboardType.Decimal else KeyboardType.Text))
 }
 

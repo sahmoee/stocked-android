@@ -1,0 +1,1890 @@
+{
+  "formatVersion": 1,
+  "generatedDate": "2026-10-08",
+  "scope": "Read-only source-driven parity inventory; not an assertion that iOS behavior or Android parity has passed physical acceptance.",
+  "source_counts": {
+    "ios_repository_swift_files": 575,
+    "ios_app_swift_files": 483,
+    "android_kotlin_files": 26
+  },
+  "note_on_requested_743_files": "This checkout currently contains 575 repository Swift files, not 743. Audit uses actual present source, executable hub/toolbox destinations and representative implementation files; does not claim line-by-line review of every file.",
+  "android_project_expected_location": "Documents/StockedAndroid (standalone Gradle root)",
+  "platform_policy": "Equivalent Android functions replace Apple-only frameworks; no invented unsupported on-device capabilities. Optional third-party/AI/billing integration remains optional, free manual/local paths retained.",
+  "features": [
+    {
+      "id": "shell",
+      "feature": "Five hub shell, drawer, global search, adaptive layout and theme",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/MainTabView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/TabBarView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/StockedShell.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DesignTokens.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AppMotionSystem.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/MainActivity.kt",
+        "app/src/main/java/com/sowens/stocked/ui/StockedChrome.kt",
+        "app/src/main/java/com/sowens/stocked/ui/StockedTheme.kt"
+      ],
+      "acceptance_cases": [
+        "Home/Cook/Inventory/Recipes/Grocery route identically by purpose.",
+        "Drawer actions and global search reach every implemented destination.",
+        "Phone portrait, Deck landscape, tablet split screen and 200% font have no clipped or inaccessible controls.",
+        "Back restores owning hub and process recreation preserves selected flow."
+      ],
+      "remaining_gap": "Current Compose shell resembles iOS but drawer/action breadth, motion, global cross-domain search and visual parity need source/screenshot comparison.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "inventory",
+      "feature": "Inventory CRUD, zones, quantity/container/fill tracking",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/Models.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/InventoryHubView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/InventoryFormPolicy.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/InventoryDetailsSheet.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/Models.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenRepository.kt",
+        "app/src/main/java/com/sowens/stocked/ui/InventoryScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Add/edit quantities, package size, unit, fill and all four storage zones; restart retains values.",
+        "Unknown product fields survive Android edits and mixed-version household sync.",
+        "No nonfinite quantities or invalid calendar dates persist."
+      ],
+      "remaining_gap": "Missing subzones/custom categories, X-of-Y usage, product photo editing, purchase metadata, source confidence and par levels.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "grocery",
+      "feature": "Grocery planning, checked lists, grouping, deduplication and purchase transfer",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/GroceryListView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/GroceryDedup.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/GroceryUsuals.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PurchaseDedupReviewView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/MultiStoreViews.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/GroceryScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenRules.kt"
+      ],
+      "acceptance_cases": [
+        "Exact names/package sizes deduplicate without losing IDs.",
+        "Checked rows, recipe groups and reassignment survive restart.",
+        "Review purchased groceries into inventory without duplicate consumption or purchase events."
+      ],
+      "remaining_gap": "Missing store assignment/layout, usuals/templates, purchase dedup review, product/cost enrichment and inventory purchase handoff.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "manual-recipes",
+      "feature": "Manual recipe creation/editing, details, favorites, portions, source credit",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/CreateRecipeView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/UserRecipeViews.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipePortionsEditSheet.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeCreditsView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/RecipeScreen.kt",
+        "app/src/main/java/com/sowens/stocked/ui/RecipeEditor.kt",
+        "app/src/main/java/com/sowens/stocked/ui/RecipeQuantities.kt"
+      ],
+      "acceptance_cases": [
+        "Create/edit complete recipe, ingredients, directions, servings and source credit; save/restart.",
+        "Imported license/author/image attribution survive modifications/export.",
+        "Ingredient fractions scale without fabricating quantities or allergen safety."
+      ],
+      "remaining_gap": "Missing images, rich notes, dish-role classification, nutrition, substitution selection, collection-intent review and cooking history.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "recipe-search",
+      "feature": "Recipe vault, catalogs, browse/discovery, pantry matching and collections",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/RecipeVaultViews.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeFinderView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeDiscoveryCoordinator.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/MakeabilityEngine.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeSourceHub.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/RecipeScreen.kt",
+        "app/src/main/java/com/sowens/stocked/ui/HomeScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Browse licensed bundled/remote recipes with filters, search and real images.",
+        "Pantry matching respects ingredients, amounts, equipment, diets and substitutions; missing data remains unknown.",
+        "Save/favorite/catalog source state works offline after content caching."
+      ],
+      "remaining_gap": "Only local saved recipe search/exact pantry matching currently exists; catalog/discovery feeds, cuisines, quality, source health and complete match engine absent.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "recipe-import",
+      "feature": "Reviewed recipe imports: URL, share, text, JSON, CSV, Cooklang and catalogs",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/SharedRecipeImporter.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeCSV.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PortableRecipeFiles.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CooklangFederation.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeNLGImporter.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SocialImportFetcher.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/imports/RecipeImporter.kt",
+        "app/src/main/java/com/sowens/stocked/imports/RecipeWebFetcher.kt",
+        "app/src/main/java/com/sowens/stocked/ui/RecipeImportDialog.kt"
+      ],
+      "acceptance_cases": [
+        "Import bounded public JSON-LD website; reject local/private networks and unsafe redirects.",
+        "Android share imports preview before persistent commit.",
+        "CSV/JSON/Cooklang, source metadata and instruction boundaries match published formats.",
+        "Duplicate import presents deterministic choices and preserves private originals."
+      ],
+      "remaining_gap": "No social/video extraction, catalog migration review, RecipeNLG/Kaggle large streaming imports, original portable-source storage/approval or full connection federation.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "receipt-barcode",
+      "feature": "Receipt and barcode scanning, review, OCR and learning",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/ReceiptScannerView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ReceiptProcessingService.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ReceiptLearningIndex.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/BarcodeScannerView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/OpenFoodFactsClient.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/scan/ScanScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Bundled OCR/barcode works offline without Google Play services.",
+        "Rotate/large image bounds work; cancellation cannot save unreviewed items.",
+        "Receipt review retains quantities, prices/store/date and source confidence.",
+        "One approved receipt commit persists atomically and schedules one sync."
+      ],
+      "remaining_gap": "Current OCR text requires manual one-name-per-line cleanup; AI receipt normalization, product enrichment, corrections/learning, review metadata and shelf recognition missing.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "cook-session",
+      "feature": "Cook Now sessions, steps, persistent progress, timers and inventory consumption",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/CookHubView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CookingFlow.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CookSessionPersistence.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CookConsumption.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/StepTimerEngine.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/BeforeYouStartView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/RecipeScreen.kt",
+        "app/src/main/java/com/sowens/stocked/ui/CookingTimerStore.kt",
+        "app/src/main/java/com/sowens/stocked/ui/TimerRules.kt"
+      ],
+      "acceptance_cases": [
+        "Resume step/serving/timer state after process death/reboot.",
+        "Finishing records cooked history and explicit ingredient deductions exactly once.",
+        "Cancel cooking discards only session state and preserves planned meal.",
+        "Multiple step timers survive background with clear permission fallback."
+      ],
+      "remaining_gap": "Android has one persistent timer and basic cooking steps/explicit inventory consumption; durable full sessions, consumption review, cook history, multi timers and prep workspace absent.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "meal-planning",
+      "feature": "Weekly meal plan, dated planning, cook-ahead and calendar exchange",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/MealPlannerView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PlanAheadView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PlanAheadCore.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CookAheadCoordinator.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/MealPlanExchange.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/MealScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/Models.kt"
+      ],
+      "acceptance_cases": [
+        "Relative week and absolute dated meals remain separate and correct across midnight/timezones.",
+        "Plan/import/export preserves servings/ingredients and emits RFC5545 without calendar access.",
+        "Cook-ahead retains planned date while managing cooling/storage/reheat phases."
+      ],
+      "remaining_gap": "Basic day/date meals only; no calendar ICS, recurring rules/templates, scheduledMeals, cook-ahead or readiness/prep orchestration.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "household-core",
+      "feature": "Household membership and durable authenticated core sync",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/HouseholdSync.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HouseholdMergePolicy.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HouseholdModels.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/sync/HouseholdClient.kt",
+        "app/src/main/java/com/sowens/stocked/sync/HouseholdWire.kt",
+        "app/src/main/java/com/sowens/stocked/sync/HouseholdScheduler.kt"
+      ],
+      "acceptance_cases": [
+        "iOS creates household; Android joins with device credential and both converge CRUD/quantity/deletions.",
+        "Lost response/restart retries same operation keys exactly once; edits made in flight retained.",
+        "Denied permission or tombstone shows recoverable conflict; no data is silently dropped.",
+        "Network/401/429/backoff conditions retain journal and avoid polling storms."
+      ],
+      "remaining_gap": "Core four collections only; real cross-platform device acceptance not completed; advanced collections/conflict UI and full permission overrides absent.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "household-management",
+      "feature": "Household roles, invites, presence, activity, shared cook and delivery",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/HouseholdViews.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HouseholdSharingUI.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HouseholdCookCoordination.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HouseholdDeliveryService.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DeliverySettingsView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/HouseholdScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Owner manages roles/permissions and revokes membership; removed clients cannot pull/push.",
+        "Invitation expires/one-time usage honored; realtime foreground updates merge once.",
+        "Shared active cook coarse progress, presence/activity and optional signed delivery are bounded/private."
+      ],
+      "remaining_gap": "Android facade currently exposes only create/join/pull/push/leave, no owner management/invite generation/presence/activity/realtime/delivery/shared-cook UI.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "backup",
+      "feature": "Readable/encrypted backup, migration, section preview and recovery",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/DataExport.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenTransferManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenTransferView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RecipeMigrationSafety.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/data/BackupCodec.kt",
+        "app/src/main/java/com/sowens/stocked/ui/SettingsScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Import/export round trip every released model/unknown section, dates and IDs across iOS/Android.",
+        "Preview counts/overlaps, cancel/no-op, replace selected collisions; failures leave original disk untouched.",
+        "Encrypted .stocked recovery key authenticates manifest and payload and rejects tamper."
+      ],
+      "remaining_gap": "Readable foundation only; encrypted .stocked currently refused, section selection/media/recovery/snapshot migration and complete synthesized iOS new-record compatibility require fixtures.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "health-nutrition",
+      "feature": "Nutrition, meal logging, allergens/diets, health integration",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/NutritionReconciler.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DietaryGuard.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/HealthKitManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DietaryProfileView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/LogMealClient.swift",
+          "exists": false
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Allergen unknowns are visible; no ingredient is declared safe from name-only inference.",
+        "Macros/servings/meal log preserve provenance and unknowns.",
+        "Health integration separately asks permissions; offline nutrition remains usable."
+      ],
+      "remaining_gap": "No Android dietary profiles/nutrition/meal log/Health Connect implementation.",
+      "platform_equivalent": "Health Connect optional equivalent for HealthKit; preserve manual mode without provider."
+    },
+    {
+      "id": "ai",
+      "feature": "Kitchen assistant, recipe generation, intent updates and on-device AI",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenAssistant.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AIRecipeGeneratorView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AIInventoryAssistantView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AppleOnDeviceAI.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/StockedWorkerClient.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "AI proposal preview must require review before mutation; cancel/retry/duplicate cannot overwrite.",
+        "Quota/offline/provider failures retain manual workflows and never silently incur paid fallback.",
+        "No service/admin/provider secret in APK or exports."
+      ],
+      "remaining_gap": "No authenticated Android AI bootstrap/provider settings/guarded proposal engines.",
+      "platform_equivalent": "Apple Foundation Models replaced by optional compatible local model or existing bounded Worker; no mandatory purchase."
+    },
+    {
+      "id": "connections",
+      "feature": "Grocy/calendar, Cooklang federation and community price connections",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/FreeKitchenConnectionsView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/FreeKitchenConnectionClient.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CooklangRecipeConnectionView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CommunityPriceWatchesView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Connect own service using private local credentials; explicit reviewed import only.",
+        "Optional CalDAV edits reviewed and reversible; no credentials in household/export.",
+        "Community prices preserve ODbL/source attribution and do not send private receipt proof."
+      ],
+      "remaining_gap": "Connection clients, review UI, separate imported ledger, price watches and service discovery missing.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "home-insights",
+      "feature": "Daily brief, health score, expiry/reorder, trends and recommendations",
+      "priority": "P1",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/HomeView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DailyBriefView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenHealthScore.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SmartRecommendationView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/HomeScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Displayed counts/recommendations reflect authoritative current data after edits/restart.",
+        "Expiry uses local dates; brief toggles omit disabled household content.",
+        "Recommendations show source, staleness and offline fallback."
+      ],
+      "remaining_gap": "Home counts/pantry match/expiry cards exist; brief, health score, household context and substantive recommendations absent.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "profiles",
+      "feature": "Onboarding, cooking profile, account identity, app lock and preferences",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/WelcomeFlow.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/OnboardingQuiz.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AuthSession.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/AppLockManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/EditPreferencesView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/SettingsScreen.kt"
+      ],
+      "acceptance_cases": [
+        "Guest mode fully usable; optional account linking does not erase kitchen.",
+        "Diets/cuisines/equipment/person profiles persist and influence features.",
+        "Biometric lock protects app entry and handles recovery; data reset clearly scopes local versus remote."
+      ],
+      "remaining_gap": "Only appearance/basic settings; onboarding/profile/account linking/app lock/preferences/reset missing.",
+      "platform_equivalent": "Android Keystore/BiometricPrompt; browser or Credential Manager identity when configured."
+    },
+    {
+      "id": "notifications",
+      "feature": "Daily brief and food-expiry notifications, deep links and actions",
+      "priority": "P1",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/DailyBriefNotificationManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/NotificationActions.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/NotificationEngagement.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/CookingTimerStore.kt"
+      ],
+      "acceptance_cases": [
+        "Notification permissions optional; timer/expiry/brief distinct channels.",
+        "Reboot and notification action open correct record without double consumption.",
+        "Quiet hours and disabled content remain private."
+      ],
+      "remaining_gap": "Cooking timer alert only; daily brief/expiry/reorder schedules, quiet hours and rich actions absent.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "widgets",
+      "feature": "Home/lock-screen widgets and live cooking progress",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/WidgetBridge.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/WidgetShared.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/LiveActivityManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CookTimerActivity.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Widget shows durable latest snapshot after mutation/reboot and never stale erased data.",
+        "Live cooking notification reflects deadline/progress while backgrounded.",
+        "No custom widget tap exposes private content before lock policy."
+      ],
+      "remaining_gap": "No Android widgets or live notification UI.",
+      "platform_equivalent": "Glance AppWidget plus ongoing notification; iOS Live Activity does not port directly."
+    },
+    {
+      "id": "watch",
+      "feature": "Watch companion and wrist controls",
+      "priority": "P2",
+      "android_status": "platform_equivalent_missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/StockedPhoneWatchBridge.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/WatchCompanionSettingsView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Wear OS grocery checklist/cook timer and phone sync work without duplicating authoritative store.",
+        "Unavailable watch does not break phone."
+      ],
+      "remaining_gap": "No Wear OS companion.",
+      "platform_equivalent": "Wear OS optional independent module, not Apple Watch binary."
+    },
+    {
+      "id": "intents-search",
+      "feature": "Siri/App Intents, Spotlight, speech and voice cook controls",
+      "priority": "P2",
+      "android_status": "platform_equivalent_missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/StockedAppIntents.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SpotlightIndexer.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/VoiceCookControl.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SpeechReader.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Voice/read-aloud controls support pause and cancel without unintended actions.",
+        "Android app links/share/search open intended item and require confirmation for mutating commands."
+      ],
+      "remaining_gap": "Only share text intent; no assistant shortcuts, indexing, TTS or voice controls.",
+      "platform_equivalent": "Android app shortcuts/App Links, TTS, optional speech recognition."
+    },
+    {
+      "id": "qa-observability",
+      "feature": "QA tickets, diagnostics, invariant checks and recovery",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/StockedQAView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/QAIssueReporter.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/StockedHealthView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DiagnosticsMonitor.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Diagnostic export redacts credentials/private content; report queue durable with retries.",
+        "QA scopes app/device and preserves ticket history; production users not exposed to debug controls.",
+        "Corrupt local store retains recovery export and refuses overwrite."
+      ],
+      "remaining_gap": "Android error banners only; no QA/recovery diagnostic tooling, crash/performance acceptance instrumentation.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "store-delivery",
+      "feature": "Android release/signing, reproducible builds, privacy and distribution",
+      "priority": "P0",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/PremiumManager.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/BuildConfigurationGuard.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Signed universal APK installs on x86_64 Deck and arm64 device and upgrades without data loss.",
+        "All native libraries satisfy 16KB compatibility; privacy policy/permission rationale/licenses and deletion requirements reviewed.",
+        "GitHub source/build reports and backup policy completed; optional Play publication uses own configured account."
+      ],
+      "remaining_gap": "Preview signed build exists but no broad physical acceptance/store listing/billing equivalents; Google Play account requirements are not free.",
+      "platform_equivalent": "Free direct signed APK/GitHub releases; Play optional account setup."
+    },
+    {
+      "id": "tool-pantryValue",
+      "feature": "Pantry Value",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Sum tracked quantities and known prices; unknown prices are visibly excluded.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-expiryCalendar",
+      "feature": "Expiry Calendar",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxPlanning.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Group expiration by local date and distinguish unknown/estimated dates.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-wasteInsights",
+      "feature": "Waste Insights",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Track discarded amounts/reasons and calculate trends from durable events.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-weeklyReview",
+      "feature": "Weekly Review",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Review week consumption/waste/expiry and persist reviewed actions.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-lowStockReport",
+      "feature": "Low Stock Report",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Compare current stock with user par quantities without fabricating package conversion.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-priceLookup",
+      "feature": "Price Lookup",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Lookup explicit product/location and show licensed source, date and unit.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-budget",
+      "feature": "Grocery Budget",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxPlanning.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Set budget and record spend across periods with deterministic totals.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-batchCook",
+      "feature": "Batch Cook Planner",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxPlanning.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Plan batches and portions, prepare shopping requirements and persist schedule.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-groceryTemplates",
+      "feature": "List Templates",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxPlanning.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Save/apply reusable grocery templates without accidental duplicates.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-mealCost",
+      "feature": "Meal Cost",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxInsights.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Calculate per-serving cost from known ingredient/package prices; unknown remains unknown.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-dietaryProfile",
+      "feature": "Dietary Profile",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/DietaryProfileView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Persist dietary restrictions and apply allergen-safe review across recipes.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-roulette",
+      "feature": "Recipe Roulette",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxCooking.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Choose a real eligible recipe; no result invents missing ingredients or hides filters.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-timers",
+      "feature": "Kitchen Timers",
+      "priority": "P1",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxCooking.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/CookingTimerStore.kt"
+      ],
+      "acceptance_cases": [
+        "Create several concurrent named timers and resume after process/reboot.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-converter",
+      "feature": "Unit Converter",
+      "priority": "P1",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxCooking.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Convert compatible mass/volume/temperature units; incompatible density remains unknown.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-leftoverIdeas",
+      "feature": "Leftover Ideas",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxCooking.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Suggest from tracked leftover portions and age with food-safety caveat.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-substitutions",
+      "feature": "Substitutions",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SmartKitchenView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Show quantity ratios and dietary suitability; require explicit substitution acceptance.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-nutrition",
+      "feature": "Nutrition",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/SmartKitchenView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Estimate only from sourced nutrition/known amounts; unknown nutrients stay unknown.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-assistant",
+      "feature": "Kitchen Assistant",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenAssistant.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Generate reviewed kitchen proposals with manual/offline fallback and no paid escalation.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-cartHandoff",
+      "feature": "Send to Store",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/GroceryCartHandoff.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Preview store handoff and never automatically buy/place an order.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-family",
+      "feature": "Family",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/FamilyProfiles.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Maintain multiple eaters and their allergies/preferences without exposing profiles publicly.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-leftovers",
+      "feature": "Leftovers",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/LeftoversLifecycle.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Persist portion/storage/cooked-date and use/discard events exactly once.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-thawPlanner",
+      "feature": "Thaw Planner",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ThawPlanner.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Plan fridge thaw dates from known stored items and persist reminders; food safety stays explicit.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-event",
+      "feature": "Events",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/EventPlanner.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Plan guest count/dishes/date and derive ingredients with reviewed serving scaling.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-splitCosts",
+      "feature": "Shared Costs",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/CostSplitting.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Split recorded bills fairly and round shares to exact total.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-storeLayout",
+      "feature": "Store Layout",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/StoreLayoutLearning.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Remember aisle/store order and apply it without mutating item identity.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-preservation",
+      "feature": "Save It",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PreservationPlanner.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Review freeze/pickle/dry plan from expiry data; no unsafe automated advice.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-garden",
+      "feature": "Garden",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/GardenHarvest.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Record harvest date/quantity/source and explicitly transfer into stock.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-cookTogether",
+      "feature": "Cook Together",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/MultiRecipeTimeline.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Align multiple recipe tasks/timers to finish together and recover progress.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-readiness",
+      "feature": "Readiness",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/EmergencyPantry.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Estimate emergency meals/days from known pantry quantities with clear unknowns.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-eatingOut",
+      "feature": "Eating Out",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/TakeoutLog.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Persist restaurant/takeout spend and compare periods without double counting.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-regional",
+      "feature": "Regional",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/RegionalFoodData.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Map region terms, temperatures and gas marks with source references.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-labels",
+      "feature": "Container Labels",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ContainerLabels.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Generate/reopen labels bound to stable container IDs without putting secrets in QR.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-seasonal",
+      "feature": "Seasonal Produce",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxReference.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Use user region/month and sourced seasonal food lists with offline fallback.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-storageTips",
+      "feature": "Storage Tips",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxReference.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Display attributed safe storage guidance and avoid guessed expiry guarantees.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-shelfLife",
+      "feature": "Shelf Life Lookup",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxReference.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Search attributed food/storage shelf-life ranges and preserve uncertainty.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-snapshot",
+      "feature": "Pantry Snapshot",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxReference.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Share only explicitly selected pantry fields as readable text.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-duplicates",
+      "feature": "Duplicate Finder",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxMaintenance.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Review candidate duplicate merges without substring-only matching or ID/data loss.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-achievements",
+      "feature": "Achievements",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ToolboxMaintenance.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Derive badges from durable activity, preserve preferences and avoid false milestones.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-pantryAudit",
+      "feature": "Pantry Audit",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/PantryAuditView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Review physical count corrections atomically with undo/conflict handling.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-savings",
+      "feature": "Money Saved",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/MoneySavedView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Calculate savings from actual price/consumption records, marking estimates.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-reorder",
+      "feature": "Reorder Soon",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ReorderSoonView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Set staple/par targets and review low-stock grocery suggestions.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-activity",
+      "feature": "Household Activity",
+      "priority": "P1",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenActivityView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Show authenticated household activity and status without leaking foreign data.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-shelfScan",
+      "feature": "Scan a Shelf",
+      "priority": "P2",
+      "android_status": "missing",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/ShelfScanView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [],
+      "acceptance_cases": [
+        "Recognize shelf items into uncertain reviewed proposals; no direct unreviewed commit.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "No equivalent tool screen/business flow in current Android, except one cooking timer where noted.",
+      "platform_equivalent": null
+    },
+    {
+      "id": "tool-kitchenMath",
+      "feature": "Kitchen Math",
+      "priority": "P2",
+      "android_status": "partial",
+      "ios_sources": [
+        {
+          "path": "Stocked/KitchenToolboxView.swift",
+          "exists": true
+        },
+        {
+          "path": "Stocked/KitchenMathView.swift",
+          "exists": true
+        }
+      ],
+      "android_sources": [
+        "app/src/main/java/com/sowens/stocked/ui/KitchenToolsScreen.kt",
+        "app/src/main/java/com/sowens/stocked/data/KitchenTools.kt"
+      ],
+      "acceptance_cases": [
+        "Test all price/package/pan/dough/portion calculators for units, zero and unknown values.",
+        "Save/edit/restart/offline/error and Android accessibility behavior tested."
+      ],
+      "remaining_gap": "Offline Android tool implemented with bounded reports/calculators; full iOS interaction, richer history and physical visual acceptance remain unverified.",
+      "platform_equivalent": null
+    }
+  ],
+  "total_feature_groups": 67,
+  "overall_status": "Substantial partial native preview; full iOS functional/design parity not complete.",
+  "verification_gates": [
+    "Complete source contract fixtures and local unit/lint/signed builds.",
+    "Physical x86_64 Waydroid and arm64 phone acceptance including process death/offline/network retry.",
+    "Mixed iOS/Android household CRUD/quantities/delete/roles/replay/conflict testing.",
+    "Visual/accessibility comparison across hubs, sheets, typography, tablet and Deck.",
+    "Every missing/partial group has implemented consumer flow and acceptance evidence before full-parity claim."
+  ],
+  "android_project_observed_location": "Documents/StockedAndroid",
+  "inspection_limitations": [
+    "Bounded source review of executable entry points, models and adapters; presence in iOS source is not proof of deployed/released availability.",
+    "UI agent is concurrently adding guided cooking, Tan appearance and favorite toggles; those changes are pending compile/acceptance and are not marked complete by this inventory.",
+    "39 tests/signed build/16KB ELF checks were reported by coordinator before this audit; this artifact does not convert them into per-feature physical evidence."
+  ],
+  "latest_refinement": {
+    "date": "2026-10-09",
+    "source_review": "Codex plus Claude CLI read-only review; targeted sync follow-up found no material issues after fixes",
+    "limitations": [
+      "Full iOS functional and visual parity remains incomplete.",
+      "No live two-device household acceptance in this batch.",
+      "Steam Deck unreachable during latest installation attempt.",
+      "Unsaved editor drafts are not fully persistent across process death.",
+      "Read-only membership permits device-local edits; those edits do not sync.",
+      "Oversized household documents fail safely at transport/import bounds."
+    ]
+  }
+}

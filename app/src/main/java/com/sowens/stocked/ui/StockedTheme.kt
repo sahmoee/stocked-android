@@ -14,15 +14,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 val LocalStockedDark = staticCompositionLocalOf { false }
+val LocalStockedLightTheme = staticCompositionLocalOf { "Pastel" }
+val LocalSetStockedLightTheme = staticCompositionLocalOf<(String) -> Unit> { {} }
 val LocalSetStockedDark = staticCompositionLocalOf<(Boolean) -> Unit> { {} }
 
 object StockedPalette {
     val cream=Color(0xFFFDF7EF); val charcoal=Color(0xFF43392F); val ink=Color(0xFF3D3228)
-    val honey=Color(0xFFD2AF6A); val sage=Color(0xFF90A280)
-    @Composable fun oat()=if(LocalStockedDark.current) Color(0xFF3D362B) else Color(0xFFF1E4CF)
-    @Composable fun garden()=if(LocalStockedDark.current) Color(0xFF2E3829) else Color(0xFFE9ECDC)
-    @Composable fun peach()=if(LocalStockedDark.current) Color(0xFF423329) else Color(0xFFFAEAD6)
-    @Composable fun accent()=if(LocalStockedDark.current) Color(0xFFD5B36B) else Color(0xFF806231)
+    val sage=Color(0xFF90A280)
+    @Composable fun honey()=if(LocalStockedLightTheme.current=="Tan") Color(0xFFDEAD4A) else Color(0xFFD2AF6A)
+    @Composable fun oat()=if(LocalStockedLightTheme.current=="Tan") { if(LocalStockedDark.current) Color(0xFF2D2923) else Color(0xFFE3D1B5) } else if(LocalStockedDark.current) Color(0xFF3D362B) else Color(0xFFF1E4CF)
+    @Composable fun garden()=if(LocalStockedLightTheme.current=="Tan") oat() else if(LocalStockedDark.current) Color(0xFF2E3829) else Color(0xFFE9ECDC)
+    @Composable fun peach()=if(LocalStockedLightTheme.current=="Tan") oat() else if(LocalStockedDark.current) Color(0xFF423329) else Color(0xFFFAEAD6)
+    @Composable fun accent()=if(LocalStockedLightTheme.current=="Tan") { if(LocalStockedDark.current) Color(0xFFDEAD4A) else Color(0xFF432A08) } else if(LocalStockedDark.current) Color(0xFFD5B36B) else Color(0xFF806231)
 }
 
 @Composable
@@ -30,12 +33,18 @@ fun StockedTheme(content: @Composable () -> Unit) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("stocked-appearance", Context.MODE_PRIVATE) }
     var dark by remember { mutableStateOf(prefs.getBoolean("dark", false)) }
-    CompositionLocalProvider(LocalStockedDark provides dark, LocalSetStockedDark provides { value -> dark=value; prefs.edit().putBoolean("dark",value).apply() }) {
+    var lightTheme by remember { mutableStateOf(prefs.getString("lightTheme","Pastel")?.takeIf { it in listOf("Pastel","Tan") } ?: "Pastel") }
+    CompositionLocalProvider(LocalStockedLightTheme provides lightTheme, LocalSetStockedLightTheme provides { value -> if(value in listOf("Pastel","Tan")) { lightTheme=value; prefs.edit().putString("lightTheme",value).apply() } }, LocalStockedDark provides dark, LocalSetStockedDark provides { value -> dark=value; prefs.edit().putBoolean("dark",value).apply() }) {
+    val tan=lightTheme=="Tan"
     val colors = if (dark) darkColorScheme(
         primary=Color(0xFFD5B36B), onPrimary=Color(0xFF211E1A), primaryContainer=Color(0xFF3D362B),
         background=Color(0xFF161410), surface=Color(0xFF211E1A), surfaceContainer=Color(0xFF211E1A), surfaceContainerLow=Color(0xFF211E1A), surfaceContainerHigh=Color(0xFF29251F),
         onBackground=Color(0xFFFFFAF3), onSurface=Color(0xFFFFFAF3), onSurfaceVariant=Color(0xFFBDB4A7), outlineVariant=Color(0xFF595245),
         secondary=Color(0xFFB1C8A0), surfaceTint=Color.Transparent
+    ) else if(tan) lightColorScheme(
+        primary=Color(0xFF2D2C2A),onPrimary=Color(0xFFF5F2EB),primaryContainer=Color(0xFFE3D1B5),onPrimaryContainer=Color(0xFF1A1712),
+        background=Color(0xFFC7AB81),surface=Color(0xFFE3D1B5),surfaceContainer=Color(0xFFE3D1B5),surfaceContainerLow=Color(0xFFE3D1B5),surfaceContainerHigh=Color(0xFFE3D1B5),
+        onBackground=Color(0xFF1A1712),onSurface=Color(0xFF1A1712),onSurfaceVariant=Color(0xFF332F28),outlineVariant=Color(0xFFA68B64),secondary=Color(0xFF164C24),surfaceTint=Color.Transparent
     ) else lightColorScheme(
         primary=StockedPalette.charcoal, onPrimary=Color(0xFFFFFAF3), primaryContainer=StockedPalette.oat(), onPrimaryContainer=StockedPalette.ink,
         background=StockedPalette.cream, surface=Color(0xFFFFFAF3), surfaceContainer=Color(0xFFFFFAF3), surfaceContainerLow=Color(0xFFFFFAF3), surfaceContainerHigh=StockedPalette.oat(),
