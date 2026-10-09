@@ -19,7 +19,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Composable
-fun HomeScreen(state: KitchenState, navigate: (Int)->Unit, scan: ()->Unit) {
+fun HomeScreen(state: KitchenState, navigate: (Int)->Unit, scan: ()->Unit, tools:()->Unit) {
     val today=LocalDate.now()
     val expiring=state.inventory.filter { it.quantity>0 && it.expirationDate?.let { date -> runCatching { LocalDate.parse(date)<=today.plusDays(7) }.getOrDefault(false) }==true }.sortedBy { it.expirationDate }
     val ready=state.userRecipes.count { recipe -> recipe.ingredients.isNotEmpty() && recipe.ingredients.all { ingredient -> state.inventory.any { it.quantity>0 && KitchenRules.key(it.name)==KitchenRules.key(ingredient.name) } } }
@@ -40,6 +40,7 @@ fun HomeScreen(state: KitchenState, navigate: (Int)->Unit, scan: ()->Unit) {
         } }
         item { StockedCard(onClick={ navigate(3) }) { Row(Modifier.padding(16.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) { Icon(Icons.Outlined.Lightbulb,null,tint=StockedPalette.accent()); Column(Modifier.weight(1f)) { Text("Try a recipe with what you have",style=MaterialTheme.typography.titleMedium); Text("Turn your ingredients into something great.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }; Icon(Icons.Outlined.ChevronRight,null) } } }
         item { Text("Your shortcuts",style=MaterialTheme.typography.titleLarge) }
+        item { OutlinedButton(onClick=tools,modifier=Modifier.fillMaxWidth()) { Icon(Icons.Outlined.Handyman,null,Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Kitchen tools") } }
         item { Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { OutlinedButton(onClick=scan,modifier=Modifier.weight(1f)) { Icon(Icons.Outlined.QrCodeScanner,null,Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Scan") }; OutlinedButton(onClick={ navigate(4) },modifier=Modifier.weight(1f)) { Icon(Icons.Outlined.ShoppingCart,null,Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("${state.grocery.count { !it.isChecked }} to buy") } } }
         if(expiring.isNotEmpty()) item { StockedCard(fill=StockedPalette.peach()) { Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) { Text("Use It Soon",style=MaterialTheme.typography.titleLarge); expiring.take(4).forEach { Text("${it.name} · ${it.expirationDate}") }; TextButton(onClick={ navigate(2) }) { Text("View your kitchen") } } } }
         if(state.inventory.isEmpty()) item { StockedCard { Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) { Text("Let's stock your kitchen",style=MaterialTheme.typography.titleLarge); Text("Add a few items to track what you have, what's expiring, and your next grocery trip."); Button(onClick={ navigate(2) }) { Text("Open Kitchen") } } } }

@@ -20,10 +20,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun SettingsScreen(repository: KitchenRepository, state: KitchenState, report: (String) -> Unit) {
+fun SettingsScreen(repository: KitchenRepository, state: KitchenState, report: (String) -> Unit, tools:()->Unit) {
     val context = LocalContext.current
     val dark = LocalStockedDark.current
     val setDark = LocalSetStockedDark.current
+    val lightTheme=LocalStockedLightTheme.current
+    val setLightTheme=LocalSetStockedLightTheme.current
     val scope = rememberCoroutineScope()
     var preview by remember { mutableStateOf<ImportPreview?>(null) }
     var replace by remember { mutableStateOf(false) }
@@ -43,7 +45,10 @@ fun SettingsScreen(repository: KitchenRepository, state: KitchenState, report: (
     } } }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         EditorialHero("Make it yours", "Settings", "Your kitchen, on your device.")
+        Text("Light theme",style=MaterialTheme.typography.titleMedium)
+        Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { listOf("Pastel","Tan").forEach { theme -> FilterChip(selected=lightTheme==theme,onClick={ setLightTheme(theme) },label={ Text(theme) }) } }
         Row(verticalAlignment=androidx.compose.ui.Alignment.CenterVertically) { Text("Dark appearance",Modifier.weight(1f)); Switch(checked=dark,onCheckedChange=setDark) }
+        OutlinedButton(onClick=tools) { Text("Kitchen tools") }
         Button(onClick = { scan = true }) { Text("Scan food or receipt") }
         OutlinedButton(onClick = { household = true }) { Text("Household sync") }
         Text("${state.inventory.size} inventory entries · ${state.grocery.size} groceries · ${state.userRecipes.size} recipes · ${state.planned.size} meals")

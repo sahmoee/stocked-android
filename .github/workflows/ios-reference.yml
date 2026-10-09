@@ -1,0 +1,21 @@
+name: iOS reference drift
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 12 * * *'
+permissions:
+  contents: read
+jobs:
+  reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: sahmoee/stocked
+          ref: codex/android-native
+          path: ios-reference
+          persist-credentials: false
+      - run: python3 scripts/check-ios-reference.py ios-reference
